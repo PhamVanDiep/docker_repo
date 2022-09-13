@@ -1,0 +1,9 @@
+docker network create spring-app-net
+
+docker run --name spring-app-db --network spring-app-net -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=tutorials -e MYSQL_USER=sa -e MYSQL_PASSWORD=diep171101 -p 3307:3306 -d mysql:latest
+
+mvn clean package -D maven.test.skip=true -X
+
+docker build -t spring-app-service .
+
+docker run --network spring-app-net --name spring-app-run -p 8080:8080 -d spring-app-service
